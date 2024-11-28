@@ -3,6 +3,8 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse.BodyHandlers
 
+import com.google.gson.Gson
+
 
 fun main() {
     val client: HttpClient = HttpClient.newHttpClient()
@@ -15,9 +17,8 @@ fun main() {
     val json = response.body()
     println(json)
 
-    val myGame = Game()
-    myGame.title = "Batman: Arkham Asylum Game of the Year Edition"
-    myGame.cover = "https:\\/\\/cdn.cloudflare.steamstatic.com\\/steam\\/apps\\/35140\\/capsule_sm_120.jpg?t=1681938587"
+    val gson = Gson()
+    val myGame = gson.fromJson(json, InfoGame::class.java)
 
     println(myGame)
 }
