@@ -27,6 +27,14 @@ fun main() {
 
     val gson = Gson()
     val InfoMyGame = gson.fromJson(json, InfoGame::class.java)
+<<<<<<< HEAD
+=======
+
+    val myGame = Game(
+            InfoMyGame.info.title,
+            InfoMyGame.info.thumb
+    )
+>>>>>>> fc2801ec43f4b332066dc6becb6df9c99c9cfb90
 
     val result = runCatching {
         val myGame = Game(
