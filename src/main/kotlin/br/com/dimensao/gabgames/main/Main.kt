@@ -1,46 +1,59 @@
 package br.com.dimensao.gabgames.main
 
 import br.com.dimensao.gabgames.model.Game
+import br.com.dimensao.gabgames.model.Gamer
 import br.com.dimensao.gabgames.services.Api
+import transformAge
 import java.util.Scanner
 
 
 fun main() {
     val reading = Scanner(System.`in`)
-    println("Enter a game code to search: ")
+    val gamer = Gamer.createGamer(reading)
+    println("Registration completed successfully. Gamer data:")
+    println(gamer)
+    println("Gamer age: " + gamer.birth?.transformAge())
 
-    val search = reading.nextLine()
+    do {
+        println("Enter a game code to search: ")
 
-    val searchApi = Api()
-    val infoGame = searchApi.searchGame(search)
+        val search = reading.nextLine()
 
-    val myGame: Game? = null
+        val searchApi = Api()
+        val infoGame = searchApi.searchGame(search)
 
-    val result = runCatching {
-        val myGame = Game(
-            infoGame.info.title,
-            infoGame.info.thumb
-        )
-    }
+        val myGame: Game? = null
 
-    result.onFailure {
-        println("Nonexistent game. Try another id")
-    }
-    result.onSuccess {
-        println("Want to enter a custom description? S/N")
-        val option = reading.nextLine()
-        if(option.equals("S", true)) {
-            println("Enter your custom description for the game:")
-            val custonDescription = reading.nextLine()
-            myGame?.description = custonDescription
-        } else {
-            myGame?.description = myGame?.title
+        val result = runCatching {
+            val myGame = Game(
+                infoGame.info.title,
+                infoGame.info.thumb
+            )
         }
 
-        println(myGame)
-    }
+        result.onFailure {
+            println("Nonexistent game. Try another id")
+        }
+        result.onSuccess {
+            println("Want to enter a custom description? S/N")
+            val option = reading.nextLine()
+            if(option.equals("S", true)) {
+                println("Enter your custom description for the game:")
+                val custonDescription = reading.nextLine()
+                myGame?.description = custonDescription
+            } else {
+                myGame?.description = myGame?.title
+            }
 
-    result.onSuccess {
-        println("Search completed successfully")
-    }
+            gamer.searchGames.add(myGame)
+        }
+
+        println("Want to look for a new game? Y/N")
+        val response = reading.nextLine()
+    } while (response.equals("s", true))
+
+    println("Games searched:")
+    println(gamer.searchGames)
+
+    println("Search completed successfully")
 }
