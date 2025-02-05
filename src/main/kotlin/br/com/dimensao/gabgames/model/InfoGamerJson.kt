@@ -5,5 +5,4 @@ data class InfoGamerJson(
     val email: String,
     val dataBirth: String,
     val user: String
-) {
-}
+)

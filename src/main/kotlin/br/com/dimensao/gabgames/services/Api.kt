@@ -1,7 +1,9 @@
 package br.com.dimensao.gabgames.services
 
+import br.com.dimensao.gabgames.model.Gamer
 import br.com.dimensao.gabgames.model.InfoGame
 import br.com.dimensao.gabgames.model.InfoGamerJson
+import br.com.dimensao.gabgames.utils.createGamer
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.net.URI
@@ -28,7 +30,7 @@ class Api {
         return infoMyGame
     }
 
-    fun searchGamers(): List<InfoGamerJson> {
+    fun searchGamers(): List<Gamer> {
         val address = "https://raw.githubusercontent.com/jeniblodev/arquivosJson/main/gamers.json"
 
         val client: HttpClient = HttpClient.newHttpClient()
@@ -44,6 +46,8 @@ class Api {
         val myGamerType = object : TypeToken<List<InfoGamerJson>>() {}.type
         val gamerList: List<InfoGamerJson> = gson.fromJson(json, myGamerType)
 
-        return gamerList
+        val newList = gamerList.map { infoGamerJson -> infoGamerJson.createGamer()}
+
+        return newList
     }
 }

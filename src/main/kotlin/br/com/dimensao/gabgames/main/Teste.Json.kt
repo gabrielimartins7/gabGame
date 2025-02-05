@@ -4,7 +4,7 @@ import br.com.dimensao.gabgames.services.Api
 
 fun main() {
     val consumption = Api()
-    val gamerList = consumption.searchGamers()
+    val gamersList = consumption.searchGamers()
 
-    println(gamerList)
+    println(gamersList)
 }
