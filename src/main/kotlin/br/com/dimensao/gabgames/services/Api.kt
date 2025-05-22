@@ -12,9 +12,7 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse.BodyHandlers
 
 class Api {
-    fun searchGame(id: String):InfoGame {
-        val address = "https://www.cheapshark.com/api/1.0/games?id=$id"
-
+    private fun consumesData(address: String): String {
         val client: HttpClient = HttpClient.newHttpClient()
         val request = HttpRequest.newBuilder()
             .uri(URI.create(address))
@@ -22,7 +20,13 @@ class Api {
         val response = client
             .send(request, BodyHandlers.ofString())
 
-        val json = response.body()
+        return response.body()
+    }
+
+    fun searchGame(id: String):InfoGame {
+        val address = "https://www.cheapshark.com/api/1.0/games?id=$id"
+        val json = consumesData(address)
+
 
         val gson = Gson()
         val infoMyGame = gson.fromJson(json, InfoGame::class.java)
@@ -32,15 +36,7 @@ class Api {
 
     fun searchGamers(): List<Gamer> {
         val address = "https://raw.githubusercontent.com/jeniblodev/arquivosJson/main/gamers.json"
-
-        val client: HttpClient = HttpClient.newHttpClient()
-        val request = HttpRequest.newBuilder()
-            .uri(URI.create(address))
-            .build()
-        val response = client
-            .send(request, BodyHandlers.ofString())
-
-        val json = response.body()
+        val json = consumesData(address)
 
         val gson = Gson()
         val myGamerType = object : TypeToken<List<InfoGamerJson>>() {}.type
